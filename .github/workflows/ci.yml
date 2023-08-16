@@ -1,0 +1,238 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+      - 'feature/**'
+      - 'fix/**'
+  pull_request:
+    branches:
+      - master
+      - dev
+      - 'feature/**'
+      - 'fix/**'
+
+jobs:
+  checkout_code:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+  archive_dependencies:
+    needs: checkout_code
+    runs-on: self-hosted
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+  sca_testing:
+    needs: archive_dependencies
+    runs-on: self-hosted
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          maven-version: '3.8.1'
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+
+      - name: Run Snyk test
+        run: snyk test --all-projects --severity-threshold=high
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: false
+
+  build:
+    needs: sca_testing
+    runs-on: self-hosted
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+          JWT_HEADER: ${{ secrets.JWT_HEADER }}
+          JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
+          SPRING_DDL_AUTO: ${{ secrets.SPRING_DDL_AUTO }}
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          SPRING_DATASOURCE_DRIVER: ${{ secrets.SPRING_DATASOURCE_DRIVER }}
+          SPRING_TEST_PROFILE: ${{ secrets.SPRING_TEST_PROFILE }}
+          SPRING_HIBERNATE_DIALECT: ${{ secrets.SPRING_HIBERNATE_DIALECT }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_PROTOCOL: ${{ secrets.MAIL_PROTOCOL }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          MAIL_SMTP_AUTH: ${{ secrets.MAIL_SMTP_AUTH }}
+          MAIL_TLS_ENABLE: ${{ secrets.MAIL_TLS_ENABLE }}
+          MAIL_TLS_REQUIRED: ${{ secrets.MAIL_TLS_REQUIRED }}
+          MAIL_SSL_ENABLE: ${{ secrets.MAIL_SSL_ENABLE }}
+          API_URL: ${{ secrets.API_URL }}
+        run: |
+          mvn clean compile package -Dmaven.test.skip=true --batch-mode --no-transfer-progress \
+          -Djwt.secret="${JWT_SECRET}" \
+          -Djwt.token.expiration="${JWT_EXPIRATION}" \
+          -Djwt.token.header="${JWT_HEADER}" \
+          -Djwt.token.prefix="${JWT_PREFIX}" \
+          -Dspring.jpa.hibernate.ddl-auto="${SPRING_DDL_AUTO}" \
+          -Dspring.datasource.url="${SPRING_DATASOURCE_URL}" \
+          -Dspring.datasource.username="${SPRING_DATASOURCE_USERNAME}" \
+          -Dspring.datasource.password="${SPRING_DATASOURCE_PASSWORD}" \
+          -Dspring.datasource.driver-class-name="${SPRING_DATASOURCE_DRIVER}" \
+          -Dspring.profiles.active="${SPRING_TEST_PROFILE}" \
+          -Dspring.jpa.properties.hibernate.dialect="${SPRING_HIBERNATE_DIALECT}" \
+          -Dspring.mail.host="${MAIL_HOST}" \
+          -Dspring.mail.port="${MAIL_PORT}" \
+          -Dspring.mail.protocol="${MAIL_PROTOCOL}" \
+          -Dspring.mail.username="${MAIL_USERNAME}" \
+          -Dspring.mail.password="${MAIL_PASSWORD}" \
+          -Dspring.mail.properties.mail.smtp.auth="${MAIL_SMTP_AUTH}" \
+          -Dspring.mail.properties.mail.smtp.starttls.enable="${MAIL_TLS_ENABLE}" \
+          -Dspring.mail.properties.mail.smtp.starttls.required="${MAIL_TLS_REQUIRED}" \
+          -Dspring.mail.properties.mail.smtp.ssl.enable="${MAIL_SSL_ENABLE}" \
+          -Dapi.url="${API_URL}"
+
+  test:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Run tests
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+          JWT_HEADER: ${{ secrets.JWT_HEADER }}
+          JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
+          SPRING_DDL_AUTO: ${{ secrets.SPRING_DDL_AUTO }}
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          SPRING_DATASOURCE_DRIVER: ${{ secrets.SPRING_DATASOURCE_DRIVER }}
+          SPRING_TEST_PROFILE: ${{ secrets.SPRING_TEST_PROFILE }}
+          SPRING_HIBERNATE_DIALECT: ${{ secrets.SPRING_HIBERNATE_DIALECT }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_PROTOCOL: ${{ secrets.MAIL_PROTOCOL }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          MAIL_SMTP_AUTH: ${{ secrets.MAIL_SMTP_AUTH }}
+          MAIL_TLS_ENABLE: ${{ secrets.MAIL_TLS_ENABLE }}
+          MAIL_TLS_REQUIRED: ${{ secrets.MAIL_TLS_REQUIRED }}
+          MAIL_SSL_ENABLE: ${{ secrets.MAIL_SSL_ENABLE }}
+          API_URL: ${{ secrets.API_URL }}
+        run: |
+          mvn test --batch-mode --no-transfer-progress \
+          -Dspring.profiles.active=test-in-db \
+          -Djwt.secret="${JWT_SECRET}" \
+          -Djwt.token.expiration="${JWT_EXPIRATION}" \
+          -Djwt.token.header="${JWT_HEADER}" \
+          -Djwt.token.prefix="${JWT_PREFIX}" \
+          -Dspring.jpa.hibernate.ddl-auto="${SPRING_DDL_AUTO}" \
+          -Dspring.datasource.url="${SPRING_DATASOURCE_URL}" \
+          -Dspring.datasource.username="${SPRING_DATASOURCE_USERNAME}" \
+          -Dspring.datasource.password="${SPRING_DATASOURCE_PASSWORD}" \
+          -Dspring.datasource.driver-class-name="${SPRING_DATASOURCE_DRIVER}" \
+          -Dspring.profiles.active="${SPRING_TEST_PROFILE}" \
+          -Dspring.jpa.properties.hibernate.dialect="${SPRING_HIBERNATE_DIALECT}" \
+          -Dspring.mail.host="${MAIL_HOST}" \
+          -Dspring.mail.port="${MAIL_PORT}" \
+          -Dspring.mail.protocol="${MAIL_PROTOCOL}" \
+          -Dspring.mail.username="${MAIL_USERNAME}" \
+          -Dspring.mail.password="${MAIL_PASSWORD}" \
+          -Dspring.mail.properties.mail.smtp.auth="${MAIL_SMTP_AUTH}" \
+          -Dspring.mail.properties.mail.smtp.starttls.enable="${MAIL_TLS_ENABLE}" \
+          -Dspring.mail.properties.mail.smtp.starttls.required="${MAIL_TLS_REQUIRED}" \
+          -Dspring.mail.properties.mail.smtp.ssl.enable="${MAIL_SSL_ENABLE}" \
+          -Dapi.url="${API_URL}"
+
+      - name: Generate tests report
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
+          JWT_HEADER: ${{ secrets.JWT_HEADER }}
+          JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
+          SPRING_DDL_AUTO: ${{ secrets.SPRING_DDL_AUTO }}
+          SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+          SPRING_DATASOURCE_DRIVER: ${{ secrets.SPRING_DATASOURCE_DRIVER }}
+          SPRING_TEST_PROFILE: ${{ secrets.SPRING_TEST_PROFILE }}
+          SPRING_HIBERNATE_DIALECT: ${{ secrets.SPRING_HIBERNATE_DIALECT }}
+          MAIL_HOST: ${{ secrets.MAIL_HOST }}
+          MAIL_PORT: ${{ secrets.MAIL_PORT }}
+          MAIL_PROTOCOL: ${{ secrets.MAIL_PROTOCOL }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          MAIL_SMTP_AUTH: ${{ secrets.MAIL_SMTP_AUTH }}
+          MAIL_TLS_ENABLE: ${{ secrets.MAIL_TLS_ENABLE }}
+          MAIL_TLS_REQUIRED: ${{ secrets.MAIL_TLS_REQUIRED }}
+          MAIL_SSL_ENABLE: ${{ secrets.MAIL_SSL_ENABLE }}
+          API_URL: ${{ secrets.API_URL }}
+        run: |
+          mvn surefire-report:report \
+          -Dspring.profiles.active=test-in-db \
+          -Djwt.secret="${JWT_SECRET}" \
+          -Djwt.token.expiration="${JWT_EXPIRATION}" \
+          -Djwt.token.header="${JWT_HEADER}" \
+          -Djwt.token.prefix="${JWT_PREFIX}" \
+          -Dspring.jpa.hibernate.ddl-auto="${SPRING_DDL_AUTO}" \
+          -Dspring.datasource.url="${SPRING_DATASOURCE_URL}" \
+          -Dspring.datasource.username="${SPRING_DATASOURCE_USERNAME}" \
+          -Dspring.datasource.password="${SPRING_DATASOURCE_PASSWORD}" \
+          -Dspring.datasource.driver-class-name="${SPRING_DATASOURCE_DRIVER}" \
+          -Dspring.profiles.active="${SPRING_TEST_PROFILE}" \
+          -Dspring.jpa.properties.hibernate.dialect="${SPRING_HIBERNATE_DIALECT}" \
+          -Dspring.mail.host="${MAIL_HOST}" \
+          -Dspring.mail.port="${MAIL_PORT}" \
+          -Dspring.mail.protocol="${MAIL_PROTOCOL}" \
+          -Dspring.mail.username="${MAIL_USERNAME}" \
+          -Dspring.mail.password="${MAIL_PASSWORD}" \
+          -Dspring.mail.properties.mail.smtp.auth="${MAIL_SMTP_AUTH}" \
+          -Dspring.mail.properties.mail.smtp.starttls.enable="${MAIL_TLS_ENABLE}" \
+          -Dspring.mail.properties.mail.smtp.starttls.required="${MAIL_TLS_REQUIRED}" \
+          -Dspring.mail.properties.mail.smtp.ssl.enable="${MAIL_SSL_ENABLE}" \
+          -Dapi.url="${API_URL}"
+
+      - name: Upload tests report
+        run: cp -r web-api/target/site/* /root/pa-cxr/prod/tests/.
+
+  deploy:
+    needs: test
+    runs-on: self-hosted
+    steps:
+      - name: Copy built artifacts (pre-production)
+        if: github.ref == 'refs/heads/dev'
+        run: for jarFile in `find . -name *SNAPSHOT.jar`; do cp $jarFile /root/pa-cxr/pre-prod/back/.; done
+
+      - name: Run the application (pre-production)
+        if: github.ref == 'refs/heads/dev'
+        run: cd /root/pa-cxr/pre-prod/back/; sh run_back.sh
+
+      - name: Copy built artifacts (production)
+        if: github.ref == 'refs/heads/master'
+        run: for jarFile in `find . -name *SNAPSHOT.jar`; do cp $jarFile /root/pa-cxr/prod/back/.; done
+
+      - name: Run the application (production)
+        if: github.ref == 'refs/heads/master'
+        run: cd /root/pa-cxr/prod/back/; sh run_back.sh
