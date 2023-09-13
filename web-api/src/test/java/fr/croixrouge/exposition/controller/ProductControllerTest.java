@@ -3,7 +3,6 @@ package fr.croixrouge.exposition.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import fr.croixrouge.config.InDBMockRepositoryConfig;
-import fr.croixrouge.config.MockRepositoryConfig;
 import fr.croixrouge.exposition.dto.QuantifierDTO;
 import fr.croixrouge.exposition.dto.core.LoginRequest;
 import fr.croixrouge.exposition.dto.product.CreateProductDTO;
@@ -28,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Import({InDBMockRepositoryConfig.class, MockRepositoryConfig.class})
+@Import({InDBMockRepositoryConfig.class})
 class ProductControllerTest {
 
     @Autowired

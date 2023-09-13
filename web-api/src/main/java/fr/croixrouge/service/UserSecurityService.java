@@ -18,8 +18,7 @@ public class UserSecurityService implements UserDetailsService {
 
     @Override
     public UserSecurity loadUserByUsername(String userName) {
-        UserSecurity user = userRepository.findByUsername(userName).map(UserSecurity::new)
+        return userRepository.findByUsername(userName).map(UserSecurity::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + userName));
-        return user;
     }
 }

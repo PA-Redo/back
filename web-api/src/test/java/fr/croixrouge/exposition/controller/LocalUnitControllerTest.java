@@ -2,7 +2,6 @@ package fr.croixrouge.exposition.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.croixrouge.config.InDBMockRepositoryConfig;
-import fr.croixrouge.config.MockRepositoryConfig;
 import fr.croixrouge.domain.model.ID;
 import fr.croixrouge.exposition.dto.core.*;
 import org.junit.jupiter.api.*;
@@ -11,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import({InDBMockRepositoryConfig.class, MockRepositoryConfig.class})
+@Import({InDBMockRepositoryConfig.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 //@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class LocalUnitControllerTest {

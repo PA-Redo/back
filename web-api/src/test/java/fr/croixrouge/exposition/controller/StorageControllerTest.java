@@ -3,7 +3,6 @@ package fr.croixrouge.exposition.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import fr.croixrouge.config.InDBMockRepositoryConfig;
-import fr.croixrouge.config.MockRepositoryConfig;
 import fr.croixrouge.exposition.dto.CreateStorageDTO;
 import fr.croixrouge.exposition.dto.StorageResponse;
 import fr.croixrouge.exposition.dto.core.AddressDTO;
@@ -22,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Import({InDBMockRepositoryConfig.class, MockRepositoryConfig.class})
+@Import({InDBMockRepositoryConfig.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class StorageControllerTest {
 
