@@ -29,4 +29,5 @@ target/
 *.iml
 
 *.properties
+!application-env.properties
 /mysql/
