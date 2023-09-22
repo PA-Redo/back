@@ -58,7 +58,7 @@ jobs:
           MAIL_SSL_ENABLE: ${{ secrets.MAIL_SSL_ENABLE }}
           API_URL: ${{ secrets.API_URL }}
         run: |
-          mvn clean compile package -Dmaven.test.skip=true --batch-mode --no-transfer-progress \
+          ./mvnw clean compile package -Dmaven.test.skip=true --batch-mode --no-transfer-progress \
           -Djwt.secret="${JWT_SECRET}" \
           -Djwt.token.expiration="${JWT_EXPIRATION}" \
           -Djwt.token.header="${JWT_HEADER}" \
