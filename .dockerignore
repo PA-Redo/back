@@ -1,0 +1,7 @@
+.github
+.idea
+.run
+croixrouge.iml
+docker-compose.yml
+mvnw.cmd
+README.md
