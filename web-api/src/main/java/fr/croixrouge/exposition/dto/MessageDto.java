@@ -1,7 +1,5 @@
 package fr.croixrouge.exposition.dto;
 
-import fr.croixrouge.domain.model.ID;
-
 import java.time.LocalDateTime;
 
 public class MessageDto {

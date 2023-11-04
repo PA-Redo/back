@@ -47,7 +47,9 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/v3/api-docs"),
                 new AntPathRequestMatcher("/create-account/confirm"),
                 new AntPathRequestMatcher("/localunit", HttpMethod.GET.name()),
-                new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())
+                new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name()),
+                new AntPathRequestMatcher("/chat/**"),
+                new AntPathRequestMatcher("")
         );
 
         http
@@ -61,6 +63,7 @@ public class SecurityConfig {
                         .requestMatchers("/beneficiaries/register").permitAll()
                         .requestMatchers("/create-account/confirm").permitAll()
                         .requestMatchers("/localunit", HttpMethod.GET.name()).permitAll()
+                        .requestMatchers("/chat/**").permitAll()
                     .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll() //allow CORS option calls
                     .anyRequest().authenticated();
             })

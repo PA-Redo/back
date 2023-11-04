@@ -1,6 +1,5 @@
 package fr.croixrouge.service;
 
-import fr.croixrouge.domain.model.Beneficiary;
 import fr.croixrouge.domain.model.ID;
 import fr.croixrouge.storage.model.Chat;
 import fr.croixrouge.storage.model.Message;
@@ -14,9 +13,11 @@ import java.util.List;
 public class ChatService {
 
     private final ChatRepository chatRepository;
+    private final BeneficiaryService beneficiaryService;
 
-    public ChatService(ChatRepository chatRepository) {
+    public ChatService(ChatRepository chatRepository, BeneficiaryService beneficiaryService) {
         this.chatRepository = chatRepository;
+        this.beneficiaryService = beneficiaryService;
     }
 
     public List<Chat> allChatOfBeneficiary(ID beneficiaryId) {
@@ -35,7 +36,7 @@ public class ChatService {
         chatRepository.postMessage(conversationId, author, message, date);
     }
 
-    public void createChat(Beneficiary author, String convname) {
-        chatRepository.createChat(author, convname);
+    public void createChat(ID author, String convname) {
+        chatRepository.createChat(beneficiaryService.findByUserId(author), convname);
     }
 }
