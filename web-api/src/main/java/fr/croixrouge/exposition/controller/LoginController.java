@@ -26,7 +26,7 @@ public class LoginController extends ErrorHandler {
 
     @PostMapping(value = "/volunteer", consumes = "application/json", produces = "application/json")
     public ResponseEntity<LoginResponse> volunteerLogin(@RequestBody LoginRequest loginRequest) {
-        try { // TODO Controller Exception handling
+        try {
             return ResponseEntity.ok(service.authenticateVolunteer(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -39,7 +39,7 @@ public class LoginController extends ErrorHandler {
 
     @PostMapping(value = "/beneficiary", consumes = "application/json", produces = "application/json")
     public ResponseEntity<LoginResponse> beneficiaryLogin(@RequestBody LoginRequest loginRequest) {
-        try { // TODO Controller Exception handling
+        try {
             return ResponseEntity.ok(service.authenticateBeneficiary(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

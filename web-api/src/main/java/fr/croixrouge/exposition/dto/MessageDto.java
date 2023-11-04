@@ -1,20 +1,22 @@
 package fr.croixrouge.exposition.dto;
 
+import fr.croixrouge.domain.model.ID;
+
+import java.time.LocalDateTime;
+
 public class MessageDto {
-    private final String author;
+    private final long author;
     private final String content;
-    private final String date;
-    private final String time;
+    private final LocalDateTime date;
 
 
-    public MessageDto(String author, String content, String date, String time) {
+    public MessageDto(long author, String content, LocalDateTime date) {
         this.author = author;
         this.content = content;
         this.date = date;
-        this.time = time;
     }
 
-    public String getAuthor() {
+    public Long getAuthor() {
         return author;
     }
 
@@ -22,11 +24,7 @@ public class MessageDto {
         return content;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
-    }
-
-    public String getTime() {
-        return time;
     }
 }

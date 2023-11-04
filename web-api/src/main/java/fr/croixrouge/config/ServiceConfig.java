@@ -1,12 +1,14 @@
 package fr.croixrouge.config;
 
 import fr.croixrouge.repository.db.beneficiary.InDBBeneficiaryRepository;
+import fr.croixrouge.repository.db.chat.InDBChatRepository;
 import fr.croixrouge.repository.db.product.InDBProductRepository;
 import fr.croixrouge.repository.db.storage.InDBStorageRepository;
 import fr.croixrouge.repository.db.storage_product.InDBStorageProductRepository;
 import fr.croixrouge.repository.db.storage_product.StorageProductDBRepository;
 import fr.croixrouge.repository.db.user_product.InDBBeneficiaryProductRepository;
 import fr.croixrouge.repository.db.user_product.UserProductDBRepository;
+import fr.croixrouge.service.ChatService;
 import fr.croixrouge.storage.repository.BeneficiaryProductRepository;
 import fr.croixrouge.storage.repository.StorageProductRepository;
 import fr.croixrouge.storage.service.StorageProductService;

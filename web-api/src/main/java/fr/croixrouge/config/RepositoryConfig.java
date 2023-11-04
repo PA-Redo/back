@@ -4,6 +4,9 @@ import fr.croixrouge.repository.EventRepository;
 import fr.croixrouge.repository.db.beneficiary.BeneficiaryDBRepository;
 import fr.croixrouge.repository.db.beneficiary.FamilyMemberDBRepository;
 import fr.croixrouge.repository.db.beneficiary.InDBBeneficiaryRepository;
+import fr.croixrouge.repository.db.chat.ChatDBRepository;
+import fr.croixrouge.repository.db.chat.InDBChatRepository;
+import fr.croixrouge.repository.db.chat.MessageDBRepository;
 import fr.croixrouge.repository.db.event.EventDBRepository;
 import fr.croixrouge.repository.db.event.EventSessionDBRepository;
 import fr.croixrouge.repository.db.event.EventTimeWindowDBRepository;
@@ -22,6 +25,7 @@ import fr.croixrouge.repository.db.user.InDBUserRepository;
 import fr.croixrouge.repository.db.user.UserDBRepository;
 import fr.croixrouge.repository.db.volunteer.InDBVolunteerRepository;
 import fr.croixrouge.repository.db.volunteer.VolunteerDBRepository;
+import fr.croixrouge.storage.repository.ChatRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -98,4 +102,9 @@ public class RepositoryConfig {
         return new InDBStorageRepository(storageDBRepository, inDBLocalUnitRepository);
     }
 
+    @Bean
+    @Primary
+    public InDBChatRepository chatRepository(ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository) {
+        return new InDBChatRepository(chatRepository, messageRepository, inDBUserRepository, familyMemberDBRepository);
+    }
 }

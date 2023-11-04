@@ -32,7 +32,7 @@ class BeneficiaryProductServiceTest {
 
     private final StorageProductService storageProductService = new StorageProductService(storageProductRepository);
 
-    private final BeneficiaryProductService beneficiaryProductService = new BeneficiaryProductService(beneficiaryProductRepository, storageProductService, null, null); //TODO
+    private final BeneficiaryProductService beneficiaryProductService = new BeneficiaryProductService(beneficiaryProductRepository, storageProductService, null, null);
 
     private final User user = new User(new ID(1L), "TEST", "TEST", null, List.of(), true, null);
 

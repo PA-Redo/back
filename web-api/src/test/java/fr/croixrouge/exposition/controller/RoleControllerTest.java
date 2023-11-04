@@ -226,7 +226,6 @@ public class RoleControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(roleCreationRequest.getName()))
                 .andExpect(jsonPath("$.description").value(roleCreationRequest.getDescription()));
-        //TODO : fix authorizations order in map
             //    .andExpect(jsonPath("$.authorizations").value("{"+Resources.RESOURCE.name()+"=["+Operations.READ.name()+", "+Operations.CREATE.name()+"], "+Resources.EVENT+"=["+Operations.READ.name()+"]}") )     ;
     }
 
