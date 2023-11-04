@@ -111,23 +111,32 @@ public class InDBChatRepository implements ChatRepository {
     }
 
     @Override
-    public void postMessage(ID conversationId, ID author, String message, LocalDateTime date) {
+    public void postMessage(ID conversationId, ID author, String message) {
         messageRepository.save(
                 new MessageDB(null,
                         chatRepository.findById(conversationId.value()).orElseThrow(),
                         message,
-                        date,
+                        LocalDateTime.now(),
                         inDBUserRepository.toUserDB(inDBUserRepository.findById(author).orElseThrow())
                 )
         );
     }
 
     @Override
-    public void createChat(Beneficiary author, String convname) {
-        chatRepository.save(
+    public void createChat(Beneficiary author, String convname, String firstMessage) {
+        ChatDB chat = chatRepository.save(
                 new ChatDB(null,
                         toBenefDB(author),
                         convname
+                )
+        );
+
+        messageRepository.save(
+                new MessageDB(null,
+                        chat,
+                        firstMessage,
+                        LocalDateTime.now(),
+                        inDBUserRepository.toUserDB(inDBUserRepository.findById(author.getId()).orElseThrow())
                 )
         );
     }

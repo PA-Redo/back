@@ -32,11 +32,11 @@ public class ChatService {
         return chatRepository.findMessagesByChatId(chatId);
     }
 
-    public void sendMessage(ID conversationId, ID author, String message, LocalDateTime date) {
-        chatRepository.postMessage(conversationId, author, message, date);
+    public void sendMessage(ID conversationId, ID author, String message) {
+        chatRepository.postMessage(conversationId, author, message);
     }
 
-    public void createChat(ID author, String convname) {
-        chatRepository.createChat(beneficiaryService.findByUserId(author), convname);
+    public void createChat(ID author, String convname, String firstMessage) {
+        chatRepository.createChat(beneficiaryService.findByUserId(author), convname, firstMessage);
     }
 }

@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChatRepository extends CRUDRepository<ID, Chat> {
-    void postMessage(ID conversationId, ID author, String message, LocalDateTime date);
+    void postMessage(ID conversationId, ID author, String message);
 
-    void createChat(Beneficiary author, String convname);
+    void createChat(Beneficiary author, String convname, String firstMessage);
 
     List<Chat> findByBeneficiaryId(ID beneficiaryId);
 

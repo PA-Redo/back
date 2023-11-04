@@ -3,6 +3,7 @@ package fr.croixrouge.exposition.controller;
 import fr.croixrouge.domain.model.ID;
 import fr.croixrouge.exposition.dto.ChatDto;
 import fr.croixrouge.exposition.dto.CreateChatDto;
+import fr.croixrouge.exposition.dto.CreateMessageDto;
 import fr.croixrouge.exposition.dto.MessageDto;
 import fr.croixrouge.exposition.error.ErrorHandler;
 import fr.croixrouge.service.ChatService;
@@ -22,8 +23,8 @@ public class ChatController extends ErrorHandler {
     }
 
     @PostMapping("/messages/{conversationId}")
-    public void postMessage(@PathVariable Long conversationId, @RequestBody MessageDto messageDto) {
-        chatService.sendMessage(ID.of(conversationId), ID.of(messageDto.getAuthor()), messageDto.getContent(), messageDto.getDate());
+    public void postMessage(@PathVariable Long conversationId, @RequestBody CreateMessageDto messageDto) {
+        chatService.sendMessage(ID.of(conversationId), ID.of(messageDto.getAuthor()), messageDto.getContent());
     }
 
     @GetMapping("/messages/{conversationId}")
@@ -54,6 +55,6 @@ public class ChatController extends ErrorHandler {
 
     @PostMapping("/conversations")
     public void createConversation(@RequestBody CreateChatDto chatDto) {
-        chatService.createChat(ID.of(chatDto.getAuthor()), chatDto.getConvname());
+        chatService.createChat(ID.of(chatDto.getAuthor()), chatDto.getConvname(), chatDto.getFistMessage());
     }
 }
