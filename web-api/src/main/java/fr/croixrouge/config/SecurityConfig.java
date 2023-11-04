@@ -48,8 +48,7 @@ public class SecurityConfig {
                 new AntPathRequestMatcher("/create-account/confirm"),
                 new AntPathRequestMatcher("/localunit", HttpMethod.GET.name()),
                 new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name()),
-                new AntPathRequestMatcher("/chat/**"),
-                new AntPathRequestMatcher("")
+                new AntPathRequestMatcher("/chat/**")
         );
 
         http
