@@ -1,11 +1,14 @@
 package fr.croixrouge.exposition.controller;
 
 import fr.croixrouge.domain.model.ID;
+import fr.croixrouge.exposition.dto.ChatDto;
 import fr.croixrouge.exposition.dto.CreateChatDto;
 import fr.croixrouge.exposition.dto.MessageDto;
 import fr.croixrouge.exposition.error.ErrorHandler;
 import fr.croixrouge.service.ChatService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 //todo revoir les valuers de retour
 @RestController
@@ -24,18 +27,29 @@ public class ChatController extends ErrorHandler {
     }
 
     @GetMapping("/messages/{conversationId}")
-    public void getMessages(@PathVariable Long conversationId) {
-        chatService.allMessageOfChat(ID.of(conversationId));
+    public List<MessageDto> getMessages(@PathVariable Long conversationId) {
+        return chatService.allMessageOfChat(ID.of(conversationId)).stream()
+                .map(message -> new MessageDto(message.getAuthorId().value(), message.getMessage(), message.getDate()))
+                .toList();
     }
 
     @GetMapping("/conversations/{beneficiaryId}")
-    public void getConversations(@PathVariable Long beneficiaryId) {
-        chatService.allChatOfBeneficiary(ID.of(beneficiaryId));
+    public List<ChatDto> getConversations(@PathVariable Long beneficiaryId) {
+        return chatService.allChatOfBeneficiary(ID.of(beneficiaryId)).stream()
+                .map(chat -> new ChatDto(
+                                chat.getId().value(),
+                                chat.getName()
+                        )
+                ).toList();
     }
 
     @GetMapping("/conversations")
-    public void getConversations() {
-        chatService.findAllChat();
+    public List<ChatDto> getConversations() {
+        return chatService.findAllChat().stream().map(chat -> new ChatDto(
+                        chat.getId().value(),
+                        chat.getName()
+                )
+        ).toList();
     }
 
     @PostMapping("/conversations")
