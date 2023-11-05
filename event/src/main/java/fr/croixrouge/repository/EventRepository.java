@@ -32,4 +32,6 @@ public interface EventRepository extends CRUDRepository<ID, Event> {
     boolean updateEventSessions(ID eventId, ID sessionId, Event event, int eventTimeWindowDuration, int eventTimeWindowOccurrence, int eventTimeWindowMaxParticipants);
 
     boolean deleteEventSession(ID eventId, ID sessionId);
+
+    List<Event> findByBeneficiary(ID beneficiaryId);
 }

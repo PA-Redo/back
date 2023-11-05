@@ -88,6 +88,18 @@ public class EventController extends CRUDController<ID, Event, EventService, Eve
         return ResponseEntity.ok(eventResponse);
     }
 
+    @GetMapping("/all/{localUnitId}/{benefId}")
+    public ResponseEntity<List<EventResponse>> getEventsByBeneficiary(@PathVariable ID localUnitId, @PathVariable ID benefId) {
+        final List<EventResponse> eventResponse = new ArrayList<>();
+        final List<Event> events = service.findEventByBeneficiary(benefId);
+        for (Event event : events) {
+            for (EventSession session : event.getSessions()) {
+                eventResponse.add(EventResponse.fromEvent(event, session));
+            }
+        }
+        return ResponseEntity.ok(eventResponse);
+    }
+
     @GetMapping("/stats")
     public ResponseEntity<EventStatsResponse> getEventsStatsByLocalUnitId(HttpServletRequest request) {
         ID localUnitId = authenticationService.getUserLocalUnitIdFromJwtToken(request);

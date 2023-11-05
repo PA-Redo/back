@@ -420,7 +420,8 @@ public class InDBEventRepository implements EventRepository {
                             eventTimeWindowMaxParticipants,
                             new ArrayList<>()
                     ));
-                }Map<ZonedDateTime, List<ID>> participantsByTimeWindow = session.getTimeWindows().stream().collect(Collectors.toMap(EventTimeWindow::getStart, EventTimeWindow::getParticipants));
+                }
+                Map<ZonedDateTime, List<ID>> participantsByTimeWindow = session.getTimeWindows().stream().collect(Collectors.toMap(EventTimeWindow::getStart, EventTimeWindow::getParticipants));
                 for (EventTimeWindow timeWindow : updatedTimeWindows) {
                     for (Map.Entry<ZonedDateTime, List<ID>> entry : participantsByTimeWindow.entrySet()) {
                         if (entry.getKey().toEpochSecond() >= timeWindow.getStart().toEpochSecond() && entry.getKey().toEpochSecond() < timeWindow.getEnd().toEpochSecond()) {
@@ -476,5 +477,56 @@ public class InDBEventRepository implements EventRepository {
         }
         eventSessionDBRepository.deleteById(sessionId.value());
         return true;
+    }
+
+    @Override
+    public List<Event> findByBeneficiary(ID beneficiaryId) {
+        List<Event> list = eventTimeWindowDBRepository.findByEventSessionDB_EventDB_LocalUnitIDAndStartTimeAfter(1L, ZonedDateTime.now()).stream()
+                .filter(eventTimeWindowDB -> eventTimeWindowDB.getUserDBs().stream().anyMatch(userDB -> userDB.getUserID().equals(beneficiaryId.value())))
+                .map(eventTimeWindowDB -> toEvent(eventTimeWindowDB.getEventSessionDB().getEventDB()))
+                .toList();
+
+        return eventToExactOccurrenceEventForBeneficiary(list, beneficiaryId);
+    }
+
+    private List<Event> eventToExactOccurrenceEventForBeneficiary(List<Event> events, ID beneficiaryId) {
+        List<Event> exactOccurrenceEvents = new ArrayList<>();
+        for (Event event : events) {
+            List<EventSession> eventSessions = new ArrayList<>();
+            for (EventSession eventSession : event.getSessions()) {
+                List<EventTimeWindow> eventTimeWindows = new ArrayList<>();
+                for (EventTimeWindow eventTimeWindow : eventSession.getTimeWindows()) {
+                    if (eventTimeWindow.getParticipants().contains(beneficiaryId)) {
+                        eventTimeWindows.add(eventTimeWindow);
+                    }
+                }
+                if (!eventTimeWindows.isEmpty()) {
+                    eventSessions.add(new EventSession(eventSession.getId(), eventTimeWindows));
+                }
+            }
+            if (!eventSessions.isEmpty()) {
+                exactOccurrenceEvents.add(new Event(event.getId(), event.getName(), event.getDescription(), event.getReferrer(), event.getLocalUnit(), eventSessions, 1));
+            }
+        }
+        /*List<Event> exactOccurrenceEvents = new ArrayList<>();
+        for (Event event : events) {
+            List<EventSession> eventSessions = new ArrayList<>();
+            for (EventSession eventSession : event.getSessions()) {
+                List<EventTimeWindow> eventTimeWindows = new ArrayList<>();
+                for (EventTimeWindow eventTimeWindow : eventSession.getTimeWindows()) {
+                    if (eventTimeWindow.getParticipants().size() < eventTimeWindow.getMaxParticipants()) {
+                        eventTimeWindows.add(eventTimeWindow);
+                    }
+                }
+                if (!eventTimeWindows.isEmpty()) {
+                    eventSessions.add(new EventSession(eventSession.getId(), eventTimeWindows));
+                }
+            }
+            if (!eventSessions.isEmpty()) {
+                exactOccurrenceEvents.add(new Event(event.getId(), event.getName(), event.getDescription(), event.getReferrer(), event.getLocalUnit(), eventSessions, 1));
+            }
+        }*/
+        System.out.println(exactOccurrenceEvents);
+        return exactOccurrenceEvents;
     }
 }

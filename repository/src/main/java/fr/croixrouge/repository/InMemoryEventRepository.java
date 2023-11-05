@@ -301,4 +301,9 @@ public class InMemoryEventRepository extends InMemoryCRUDRepository<ID, Event> i
         this.objects.add(event);
         return true;
     }
+
+    @Override
+    public List<Event> findByBeneficiary(ID beneficiaryId) {
+        return null;
+    }
 }
