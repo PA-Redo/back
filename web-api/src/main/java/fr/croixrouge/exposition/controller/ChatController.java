@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//todo revoir les valuers de retour
 @RestController
 @RequestMapping("/chat")
 public class ChatController extends ErrorHandler {
