@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class MessageDB {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.EAGER)

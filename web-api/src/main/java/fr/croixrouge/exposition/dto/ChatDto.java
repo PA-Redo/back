@@ -1,7 +1,5 @@
 package fr.croixrouge.exposition.dto;
 
-import java.util.List;
-
 public class ChatDto {
     private final long conversationId;
     private final String convname;

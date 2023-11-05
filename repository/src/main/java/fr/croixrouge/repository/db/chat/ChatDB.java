@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 public class ChatDB {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
