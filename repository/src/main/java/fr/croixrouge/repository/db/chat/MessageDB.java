@@ -27,6 +27,9 @@ public class MessageDB {
     @JoinColumn(name = "user_db_id", nullable = false)
     private UserDB userDB;
 
+    public MessageDB() {
+    }
+
     public MessageDB(Long id, ChatDB chatDB, String message, LocalDateTime date, UserDB userDB) {
         this.id = id;
         this.chatDB = chatDB;
