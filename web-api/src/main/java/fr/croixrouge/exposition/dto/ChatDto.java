@@ -13,4 +13,8 @@ public class ChatDto {
     public String getConvname() {
         return convname;
     }
+
+    public long getConversationId() {
+        return conversationId;
+    }
 }
