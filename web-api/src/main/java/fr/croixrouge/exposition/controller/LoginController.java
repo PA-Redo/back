@@ -1,14 +1,16 @@
 package fr.croixrouge.exposition.controller;
 
 
-import fr.croixrouge.exposition.dto.ErrorDTO;
+import fr.croixrouge.exposition.dto.core.Donation;
 import fr.croixrouge.exposition.dto.core.LoginRequest;
 import fr.croixrouge.exposition.dto.core.LoginResponse;
 import fr.croixrouge.exposition.error.EmailNotConfirmError;
 import fr.croixrouge.exposition.error.ErrorHandler;
 import fr.croixrouge.exposition.error.UserNotValidatedByUL;
 import fr.croixrouge.service.AuthenticationService;
+import fr.croixrouge.service.MailService;
 import fr.croixrouge.service.VolunteerService;
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.*;
 public class LoginController extends ErrorHandler {
 
     private final AuthenticationService service;
+    private final MailService mailService;
 
-    public LoginController(AuthenticationService service, VolunteerService volunteerService) {
+    public LoginController(AuthenticationService service, VolunteerService volunteerService, MailService mailService) {
         this.service = service;
+        this.mailService = mailService;
     }
 
     @PostMapping(value = "/volunteer", consumes = "application/json", produces = "application/json")
@@ -52,6 +56,12 @@ public class LoginController extends ErrorHandler {
 
     @GetMapping(value = "/token", produces = "application/json")
     public ResponseEntity<Void> isLogin() {
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(value = "/sendEmailForSupport", produces = "application/json")
+    public ResponseEntity<Void> logout(@RequestBody Donation donation) throws MessagingException {
+        mailService.sendEmailForSupport(donation);
         return ResponseEntity.ok().build();
     }
 

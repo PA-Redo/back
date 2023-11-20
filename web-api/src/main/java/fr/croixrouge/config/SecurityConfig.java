@@ -39,6 +39,7 @@ public class SecurityConfig {
         List<RequestMatcher> excludedFilterUrl = List.of(
                 new AntPathRequestMatcher("/login/volunteer"),
                 new AntPathRequestMatcher("/login/beneficiary"),
+                new AntPathRequestMatcher("/login/sendEmailForSupport"),
                 new AntPathRequestMatcher("/login/token"),
                 new AntPathRequestMatcher("/volunteer/register"),
                 new AntPathRequestMatcher("/volunteer/token"),
@@ -58,6 +59,7 @@ public class SecurityConfig {
                         .requestMatchers("/login/volunteer").permitAll()
                         .requestMatchers("/login/beneficiary").permitAll()
                         .requestMatchers("/volunteer/register").permitAll()
+                        .requestMatchers("/login/sendEmailForSupport").permitAll()
                         .requestMatchers("/v3/api-docs").permitAll()
                         .requestMatchers("/beneficiaries/register").permitAll()
                         .requestMatchers("/create-account/confirm").permitAll()

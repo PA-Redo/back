@@ -1,5 +1,6 @@
 package fr.croixrouge.service;
 
+import fr.croixrouge.exposition.dto.core.Donation;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -202,5 +203,54 @@ public class MailService {
         message.setContent(htmlTemplate, "text/html; charset=utf-8");
 
         mailSender.send(message);
+    }
+
+    public void sendEmailForSupport(Donation donation) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+
+        message.setFrom(new InternetAddress(from));
+        message.setRecipients(MimeMessage.RecipientType.TO, donation.getEmail());
+        message.setSubject("Merci pour votre don");
+
+        String htmlTemplate = """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <!-- Add your styles or link to external stylesheets here -->
+            </head>
+            <body style="background-color: #e9ecef;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; border: 1px solid #d4dadf;">
+                    <h2 style="text-align: center; color: #1a82e2;">Merci pour votre don, ${donorName}!</h2>
+                    <p style="font-size: 16px;">Nous sommes reconnaissants de votre générosité et du soutien que vous apportez à notre cause.</p>
+                    <p style="font-size: 16px;">Récapitulatif du don :</p>
+                    <ul>
+                        <li><strong>Montant du don :</strong> ${donationAmount}</li>
+                        <li><strong>Nom :</strong> ${donorName}</li>
+                        <li><strong>Email :</strong> ${email}</li>
+                        <!-- Add more donor information as needed -->
+                    </ul>
+                    <p style="font-size: 16px;">Nous apprécions votre engagement envers notre organisation.</p>
+                    <p style="font-size: 16px;">Cordialement,</p>
+                    <p style="font-size: 16px;">L'équipe de la Croix-Rouge</p>
+                </div>
+            </body>
+            </html>
+            """;
+
+        htmlTemplate = htmlTemplate.replace("${donorName}", donation.getFirstName() + " " + donation.getLastName());
+        htmlTemplate = htmlTemplate.replace("${donationAmount}", donation.getAmount());
+        htmlTemplate = htmlTemplate.replace("${email}", donation.getEmail());
+
+
+        message.setContent(htmlTemplate, "text/html; charset=utf-8");
+
+        System.out.println("Sending email...");
+        try {
+        mailSender.send(message);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            System.out.println("Email sent");
+        }
     }
 }
