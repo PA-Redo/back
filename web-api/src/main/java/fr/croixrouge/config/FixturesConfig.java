@@ -498,6 +498,19 @@ public class FixturesConfig {
         Event event3 = new Event(null, "EPISOL Lundi", "Chaque semaine, nous ouvrons l'épicerie sociale aux personnes dans le besoin. Distribution sur rendez-vous.", volunteerValOrge1, localUnit, eventSessions3, eventSessions3.size());
         eventRepository.save(event3);
 
+        //add an event for today to test the event notification whitout participants
+        ZonedDateTime eventStartDate3bis = ZonedDateTime.of(LocalDateTime.of(2023, 11, 21, 14, 0), ZoneId.of("Europe/Paris"));
+        List<EventSession> eventSessions3bis = new ArrayList<>();
+        for (; eventStartDate3bis.isBefore(ZonedDateTime.of(LocalDateTime.of(2023, 11, 21, 19, 0), ZoneId.of("Europe/Paris"))); eventStartDate3bis = eventStartDate3bis.plusDays(7)) {
+            List<EventTimeWindow> eventTimeWindowList3bis = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+                eventTimeWindowList3bis.add(new EventTimeWindow(null, eventStartDate3bis.plusMinutes(i * 30), eventStartDate3bis.plusMinutes((i + 1) * 30), 6, new ArrayList<>()));
+            }
+            eventSessions3bis.add(new EventSession(null, eventTimeWindowList3bis));
+        }
+        Event event3bis = new Event(null, "Passage PA", "Passage.", volunteerValOrge1, localUnit, eventSessions3bis, eventSessions3bis.size());
+        eventRepository.save(event3bis);
+
         ZonedDateTime eventStartDate4 = ZonedDateTime.of(LocalDateTime.of(2023, 4, 5, 16, 0), ZoneId.of("Europe/Paris"));
         List<EventSession> eventSessions4 = new ArrayList<>();
         for (; eventStartDate4.isBefore(ZonedDateTime.of(LocalDateTime.of(2024, 1, 1, 0, 0), ZoneId.of("Europe/Paris"))); eventStartDate4 = eventStartDate4.plusDays(7)) {
