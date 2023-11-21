@@ -23,9 +23,6 @@ public class FireBaseService {
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
 
-        //how to set notification to high priority
-        //https://firebase.google.com/docs/cloud-messaging/concept-options#setting-the-priority-of-a-message
-
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(new ClassPathResource("serviceAccountKey.json").getInputStream()))
                 .build();
