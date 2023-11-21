@@ -499,12 +499,12 @@ public class FixturesConfig {
         eventRepository.save(event3);
 
         //add an event for today to test the event notification whitout participants
-        ZonedDateTime eventStartDate3bis = ZonedDateTime.of(LocalDateTime.of(2023, 11, 21, 14, 0), ZoneId.of("Europe/Paris"));
+        ZonedDateTime eventStartDate3bis = ZonedDateTime.of(LocalDateTime.of(2023, 11, 21, 16, 0), ZoneId.of("Europe/Paris"));
         List<EventSession> eventSessions3bis = new ArrayList<>();
-        for (; eventStartDate3bis.isBefore(ZonedDateTime.of(LocalDateTime.of(2023, 11, 21, 19, 0), ZoneId.of("Europe/Paris"))); eventStartDate3bis = eventStartDate3bis.plusDays(7)) {
+        for (; eventStartDate3bis.isBefore(ZonedDateTime.of(LocalDateTime.of(2023, 11, 21, 18, 0), ZoneId.of("Europe/Paris"))); eventStartDate3bis = eventStartDate3bis.plusDays(7)) {
             List<EventTimeWindow> eventTimeWindowList3bis = new ArrayList<>();
-            for (int i = 0; i < 5; i++) {
-                eventTimeWindowList3bis.add(new EventTimeWindow(null, eventStartDate3bis.plusMinutes(i * 30), eventStartDate3bis.plusMinutes((i + 1) * 30), 6, new ArrayList<>()));
+            for (int i = 0; i < 10; i++) {
+                eventTimeWindowList3bis.add(new EventTimeWindow(null, eventStartDate3bis.plusMinutes(i * 15), eventStartDate3bis.plusMinutes((i + 1) * 15), 6, new ArrayList<>()));
             }
             eventSessions3bis.add(new EventSession(null, eventTimeWindowList3bis));
         }
