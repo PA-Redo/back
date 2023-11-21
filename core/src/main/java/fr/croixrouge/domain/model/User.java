@@ -11,8 +11,9 @@ public class User extends Entity<ID> {
     protected final List<Role> roles;
     protected final boolean emailValidated;
     protected final String tokenToValidateEmail;
+    protected final String firebaseToken;
 
-    public User(ID userId, String username, String password, LocalUnit localUnit, List<Role> roles, boolean emailValidated, String tokenToValidateEmail) {
+    public User(ID userId, String username, String password, LocalUnit localUnit, List<Role> roles, boolean emailValidated, String tokenToValidateEmail, String firebaseToken) {
         super(userId);
         this.username = username;
         this.password = password;
@@ -20,6 +21,7 @@ public class User extends Entity<ID> {
         this.roles = roles;
         this.emailValidated = emailValidated;
         this.tokenToValidateEmail = tokenToValidateEmail;
+        this.firebaseToken = firebaseToken;
     }
 
     public String getUsername() {
@@ -46,8 +48,12 @@ public class User extends Entity<ID> {
         return tokenToValidateEmail;
     }
 
+    public String getFirebaseToken() {
+        return firebaseToken;
+    }
+
     public User removeRole(Role role) {
-        return new User(id, username, password, localUnit, roles.stream().filter(r -> !r.equals(role)).toList(), emailValidated, tokenToValidateEmail);
+        return new User(id, username, password, localUnit, roles.stream().filter(r -> !r.equals(role)).toList(), emailValidated, tokenToValidateEmail, firebaseToken);
     }
 
     public User addRole(Role role) {
@@ -56,7 +62,7 @@ public class User extends Entity<ID> {
         }
         var newRoles = new ArrayList<>(roles);
         newRoles.add(role);
-        return new User(id, username, password, localUnit, newRoles, emailValidated, tokenToValidateEmail);
+        return new User(id, username, password, localUnit, newRoles, emailValidated, tokenToValidateEmail, firebaseToken);
     }
 
     @Override
@@ -71,6 +77,6 @@ public class User extends Entity<ID> {
     }
 
     public User setPassword(String encode) {
-        return new User(id, username, encode, localUnit, roles, emailValidated, tokenToValidateEmail);
+        return new User(id, username, encode, localUnit, roles, emailValidated, tokenToValidateEmail, firebaseToken);
     }
 }

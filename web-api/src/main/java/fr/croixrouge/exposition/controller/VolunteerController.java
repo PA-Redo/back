@@ -76,7 +76,7 @@ public class VolunteerController extends ErrorHandler {
         if (localUnit == null) {
             return ResponseEntity.notFound().build();
         }
-        User user = new User(null, model.getUsername(), model.getPassword(), localUnit, List.of(), false, null);
+        User user = new User(null, model.getUsername(), model.getPassword(), localUnit, List.of(), false, null, null);
         Volunteer volunteer = new Volunteer(null, user, model.getFirstName(), model.getLastName(), model.getPhoneNumber(), false);
 
         ID volunteerId = service.save(volunteer);

@@ -112,7 +112,7 @@ public class BeneficiaryCreationRequest extends CreationDTO<Beneficiary> {
     public Beneficiary toModel() {
         return new Beneficiary(
                 null,
-                new User(null, this.username, this.password, null, List.of(), false, null),
+                new User(null, this.username, this.password, null, List.of(), false, null, null),
                 this.firstName,
                 this.lastName,
                 this.phoneNumber,

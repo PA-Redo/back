@@ -43,7 +43,8 @@ public class BeneficiaryService extends CRUDService<ID, Beneficiary, Beneficiary
                         beneficiary.getUser().getLocalUnit(),
                         Stream.concat(Stream.of(benefRole), beneficiary.getUser().getRoles().stream()).toList(),
                         beneficiary.getUser().isEmailValidated(),
-                        uuid
+                        uuid,
+                        beneficiary.getUser().getFirebaseToken()
                 ),
                 beneficiary.getFirstName(),
                 beneficiary.getLastName(),
@@ -79,7 +80,8 @@ public class BeneficiaryService extends CRUDService<ID, Beneficiary, Beneficiary
                         beneficiary.getUser().getLocalUnit(),
                         Stream.concat(Stream.of(benefRole), beneficiary.getUser().getRoles().stream()).toList(),
                         beneficiary.getUser().isEmailValidated(),
-                        null
+                        null,
+                        beneficiary.getUser().getFirebaseToken()
                 ),
                 beneficiary.getFirstName(),
                 beneficiary.getLastName(),
@@ -119,7 +121,8 @@ public class BeneficiaryService extends CRUDService<ID, Beneficiary, Beneficiary
                 beneficiary.getUser().getLocalUnit(),
                 beneficiary.getUser().getRoles(),
                 beneficiary.getUser().isEmailValidated(),
-                beneficiary.getUser().getTokenToValidateEmail()
+                beneficiary.getUser().getTokenToValidateEmail(),
+                beneficiary.getUser().getFirebaseToken()
         );
 
         var newBeneficiary = new Beneficiary(id,

@@ -15,4 +15,6 @@ public interface UserRepository extends CRUDRepository<ID, User> {
 
     Optional<User> findByToken(String token);
 
+    void updateFirebaseToken(String firebaseToken, String username);
+
 }

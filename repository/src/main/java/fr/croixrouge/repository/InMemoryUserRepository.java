@@ -37,4 +37,9 @@ public class InMemoryUserRepository extends InMemoryCRUDRepository<ID, User> imp
     public Optional<User> findByToken(String token) {
         return Optional.empty();
     }
+
+    @Override
+    public void updateFirebaseToken(String firebaseToken, String username) {
+
+    }
 }

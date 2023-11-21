@@ -24,7 +24,8 @@ public class ValidateAccountService {
                 user.getLocalUnit(),
                 user.getRoles(),
                 true,
-                null
+                null,
+                user.getFirebaseToken()
         );
         userService.update(updatedUser);
         return true;

@@ -46,7 +46,8 @@ public class VolunteerService extends CRUDService<ID, Volunteer, VolunteerReposi
                         volunteer.getUser().getLocalUnit(),
                         Stream.concat(Stream.of(volunteerRole), volunteer.getUser().getRoles().stream()).toList(),
                         volunteer.getUser().isEmailValidated(),
-                        uuid
+                        uuid,
+                        volunteer.getUser().getFirebaseToken()
                 ),
                 volunteer.getFirstName(),
                 volunteer.getLastName(),
@@ -77,7 +78,8 @@ public class VolunteerService extends CRUDService<ID, Volunteer, VolunteerReposi
                         volunteer.getUser().getLocalUnit(),
                         Stream.concat(Stream.of(volunteerRole), volunteer.getUser().getRoles().stream()).toList(),
                         volunteer.getUser().isEmailValidated(),
-                        null
+                        null,
+                        volunteer.getUser().getFirebaseToken()
                 ),
                 volunteer.getFirstName(),
                 volunteer.getLastName(),

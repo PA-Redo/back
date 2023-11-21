@@ -36,6 +36,9 @@ public class UserDB {
     @Column(name = "token_to_validate_email", unique = true)
     private String tokenToValidateEmail;
 
+    @Column(name = "firebase_token")
+    private String firebaseToken;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "local_unit_db_localunit_id", nullable = false)
     private LocalUnitDB localUnitDB;
@@ -44,7 +47,7 @@ public class UserDB {
         return roleDBs;
     }
 
-    public UserDB(ID id, String username, String password, LocalUnitDB localUnitDB, Set<RoleDB> roleDBs, boolean emailValidated, String tokenToValidateEmail) {
+    public UserDB(ID id, String username, String password, LocalUnitDB localUnitDB, Set<RoleDB> roleDBs, boolean emailValidated, String tokenToValidateEmail, String firebaseToken) {
         if (id != null) {
             this.userID = id.value();
         } else {
@@ -56,6 +59,7 @@ public class UserDB {
         this.roleDBs = roleDBs;
         this.emailValidated = emailValidated;
         this.tokenToValidateEmail = tokenToValidateEmail;
+        this.firebaseToken = firebaseToken;
     }
 
     public UserDB() {
@@ -92,6 +96,14 @@ public class UserDB {
 
     public String getTokenToValidateEmail() {
         return tokenToValidateEmail;
+    }
+
+    public String getFirebaseToken() {
+        return firebaseToken;
+    }
+
+    public void setFirebaseToken(String firebaseToken) {
+        this.firebaseToken = firebaseToken;
     }
 
     @Override

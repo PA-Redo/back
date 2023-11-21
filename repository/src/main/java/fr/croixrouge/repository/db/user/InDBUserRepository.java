@@ -34,7 +34,8 @@ public class InDBUserRepository implements UserRepository {
                 localUnitDBRepository.toLocalUnit(userDB.getLocalUnitDB()),
                 userDB.getRoleDBs().stream().map(roleDBRepository::toRole).toList(),
                 userDB.getEmailValidated(),
-                userDB.getTokenToValidateEmail()
+                userDB.getTokenToValidateEmail(),
+                userDB.getFirebaseToken()
         );
     }
 
@@ -46,7 +47,8 @@ public class InDBUserRepository implements UserRepository {
                 localUnitDBRepository.toLocalUnitDB(user.getLocalUnit()),
                 user.getRoles().stream().map(roleDBRepository::toRoleDB).collect(Collectors.toSet()),
                 user.isEmailValidated(),
-                user.getTokenToValidateEmail()
+                user.getTokenToValidateEmail(),
+                user.getFirebaseToken()
         );
 
     }
@@ -86,5 +88,10 @@ public class InDBUserRepository implements UserRepository {
     @Override
     public Optional<User> findByToken(String token) {
         return userDBRepository.findByToken(token).map(this::toUser);
+    }
+
+    @Override
+    public void updateFirebaseToken(String firebaseToken, String username) {
+        userDBRepository.updateFirebaseToken(firebaseToken, username);
     }
 }

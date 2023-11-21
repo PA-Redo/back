@@ -83,7 +83,7 @@ public class BeneficiaryController extends CRUDController<ID, Beneficiary, Benef
         if (localUnit == null) {
             return ResponseEntity.notFound().build();
         }
-        User user = new User(null, creationRequest.getUsername(), creationRequest.getPassword(), localUnit, List.of(), false, null);
+        User user = new User(null, creationRequest.getUsername(), creationRequest.getPassword(), localUnit, List.of(), false, null, null);
         Beneficiary beneficiary = new Beneficiary(null,
                 user,
                 creationRequest.getFirstName(),

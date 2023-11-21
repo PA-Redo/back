@@ -8,6 +8,7 @@ import fr.croixrouge.exposition.error.EmailNotConfirmError;
 import fr.croixrouge.exposition.error.ErrorHandler;
 import fr.croixrouge.exposition.error.UserNotValidatedByUL;
 import fr.croixrouge.service.AuthenticationService;
+import fr.croixrouge.service.FireBaseService;
 import fr.croixrouge.service.MailService;
 import fr.croixrouge.service.VolunteerService;
 import jakarta.mail.MessagingException;
@@ -22,16 +23,20 @@ public class LoginController extends ErrorHandler {
 
     private final AuthenticationService service;
     private final MailService mailService;
+    private final FireBaseService fireBaseService;
 
-    public LoginController(AuthenticationService service, VolunteerService volunteerService, MailService mailService) {
+    public LoginController(AuthenticationService service, VolunteerService volunteerService, MailService mailService, FireBaseService fireBaseService) {
         this.service = service;
         this.mailService = mailService;
+        this.fireBaseService = fireBaseService;
     }
 
     @PostMapping(value = "/volunteer", consumes = "application/json", produces = "application/json")
     public ResponseEntity<LoginResponse> volunteerLogin(@RequestBody LoginRequest loginRequest) {
         try {
-            return ResponseEntity.ok(service.authenticateVolunteer(loginRequest.getUsername(), loginRequest.getPassword()));
+            LoginResponse loginResponse = service.authenticateVolunteer(loginRequest.getUsername(), loginRequest.getPassword());
+            fireBaseService.updateFirebaseToken(loginRequest.getFirebaseToken(), loginRequest.getUsername());
+            return ResponseEntity.ok(loginResponse);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (EmailNotConfirmError e) {
@@ -44,7 +49,9 @@ public class LoginController extends ErrorHandler {
     @PostMapping(value = "/beneficiary", consumes = "application/json", produces = "application/json")
     public ResponseEntity<LoginResponse> beneficiaryLogin(@RequestBody LoginRequest loginRequest) {
         try {
-            return ResponseEntity.ok(service.authenticateBeneficiary(loginRequest.getUsername(), loginRequest.getPassword()));
+            LoginResponse loginResponse = service.authenticateBeneficiary(loginRequest.getUsername(), loginRequest.getPassword());
+            fireBaseService.updateFirebaseToken(loginRequest.getFirebaseToken(), loginRequest.getUsername());
+            return ResponseEntity.ok(loginResponse);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } catch (EmailNotConfirmError e) {
