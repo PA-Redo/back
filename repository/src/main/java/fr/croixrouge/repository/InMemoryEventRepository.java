@@ -306,4 +306,9 @@ public class InMemoryEventRepository extends InMemoryCRUDRepository<ID, Event> i
     public List<Event> findByBeneficiary(ID beneficiaryId) {
         return null;
     }
+
+    @Override
+    public List<EventTimeWindow> findEventInTheNext15Minutes() {
+        return null;
+    }
 }
