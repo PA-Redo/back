@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
 import fr.croixrouge.domain.repository.UserRepository;
 import fr.croixrouge.repository.EventRepository;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class FireBaseService {
+@Profile({"prod", "fixtures-prod"})
+public class FireBaseService implements IFireBaseService {
 
     private final UserRepository userRepository;
     private final FirebaseMessaging firebaseMessaging;

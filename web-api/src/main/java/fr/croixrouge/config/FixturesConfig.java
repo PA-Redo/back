@@ -503,7 +503,7 @@ public class FixturesConfig {
         List<EventSession> eventSessions3bis = new ArrayList<>();
         for (; eventStartDate3bis.isBefore(ZonedDateTime.of(LocalDateTime.of(2023, 11, 21, 18, 0), ZoneId.of("Europe/Paris"))); eventStartDate3bis = eventStartDate3bis.plusDays(7)) {
             List<EventTimeWindow> eventTimeWindowList3bis = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 17; i++) {
                 eventTimeWindowList3bis.add(new EventTimeWindow(null, eventStartDate3bis.plusMinutes(i * 15), eventStartDate3bis.plusMinutes((i + 1) * 15), 6, new ArrayList<>()));
             }
             eventSessions3bis.add(new EventSession(null, eventTimeWindowList3bis));

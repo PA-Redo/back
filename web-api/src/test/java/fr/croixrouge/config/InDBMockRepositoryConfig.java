@@ -8,6 +8,9 @@ import fr.croixrouge.repository.EventRepository;
 import fr.croixrouge.repository.db.beneficiary.BeneficiaryDBRepository;
 import fr.croixrouge.repository.db.beneficiary.FamilyMemberDBRepository;
 import fr.croixrouge.repository.db.beneficiary.InDBBeneficiaryRepository;
+import fr.croixrouge.repository.db.chat.ChatDBRepository;
+import fr.croixrouge.repository.db.chat.InDBChatRepository;
+import fr.croixrouge.repository.db.chat.MessageDBRepository;
 import fr.croixrouge.repository.db.event.EventDBRepository;
 import fr.croixrouge.repository.db.event.EventSessionDBRepository;
 import fr.croixrouge.repository.db.event.EventTimeWindowDBRepository;
@@ -30,12 +33,15 @@ import fr.croixrouge.repository.db.user_product.InDBBeneficiaryProductRepository
 import fr.croixrouge.repository.db.user_product.UserProductDBRepository;
 import fr.croixrouge.repository.db.volunteer.InDBVolunteerRepository;
 import fr.croixrouge.repository.db.volunteer.VolunteerDBRepository;
+import fr.croixrouge.service.IFireBaseService;
 import fr.croixrouge.service.MailService;
+import fr.croixrouge.service.MockFireBaseService;
 import fr.croixrouge.storage.model.Storage;
 import fr.croixrouge.storage.model.StorageProduct;
 import fr.croixrouge.storage.model.product.*;
 import fr.croixrouge.storage.model.quantifier.*;
 import fr.croixrouge.storage.repository.BeneficiaryProductRepository;
+import fr.croixrouge.storage.repository.ChatRepository;
 import fr.croixrouge.storage.repository.StorageProductRepository;
 import fr.croixrouge.storage.service.StorageProductService;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -213,7 +219,7 @@ public class InDBMockRepositoryConfig {
         volunteerRepository.save(volunteer3);
         volunteerRepository.save(southernVolunteer1);
 
-        volunteerRepository.save( new Volunteer(null, userForAuthTest, "userForAuthTest", "userForAuthTest", "+33 6 83 83 83 83", true));
+        volunteerRepository.save(new Volunteer(null, userForAuthTest, "userForAuthTest", "userForAuthTest", "+33 6 83 83 83 83", true));
 
         return volunteerRepository;
     }
@@ -398,5 +404,18 @@ public class InDBMockRepositoryConfig {
     @Primary
     public StorageProductService storageProductServiceTestCore(StorageProductRepository storageProductRepository) {
         return new StorageProductService(storageProductRepository);
+    }
+
+    //ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository
+    @Bean
+    @Primary
+    public ChatRepository chatTestRepository(ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository) {
+        return new InDBChatRepository(chatRepository, messageRepository, inDBUserRepository, familyMemberDBRepository);
+    }
+
+    @Bean
+    @Primary
+    public IFireBaseService iFireBaseService() {
+        return new MockFireBaseService();
     }
 }

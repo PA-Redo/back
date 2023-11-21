@@ -34,7 +34,7 @@ class BeneficiaryProductServiceTest {
 
     private final BeneficiaryProductService beneficiaryProductService = new BeneficiaryProductService(beneficiaryProductRepository, storageProductService, null, null);
 
-    private final User user = new User(new ID(1L), "TEST", "TEST", null, List.of(), true, null, firebaseToken);
+    private final User user = new User(new ID(1L), "TEST", "TEST", null, List.of(), true, null, null);
 
     private final Beneficiary beneficiary = new Beneficiary(new ID(1L), user, "TEST", "TEST", "number", true, LocalDate.now(), "", List.of(), 0L);
 

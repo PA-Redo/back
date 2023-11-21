@@ -7,10 +7,7 @@ import fr.croixrouge.exposition.dto.core.LoginResponse;
 import fr.croixrouge.exposition.error.EmailNotConfirmError;
 import fr.croixrouge.exposition.error.ErrorHandler;
 import fr.croixrouge.exposition.error.UserNotValidatedByUL;
-import fr.croixrouge.service.AuthenticationService;
-import fr.croixrouge.service.FireBaseService;
-import fr.croixrouge.service.MailService;
-import fr.croixrouge.service.VolunteerService;
+import fr.croixrouge.service.*;
 import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +20,9 @@ public class LoginController extends ErrorHandler {
 
     private final AuthenticationService service;
     private final MailService mailService;
-    private final FireBaseService fireBaseService;
+    private final IFireBaseService fireBaseService;
 
-    public LoginController(AuthenticationService service, VolunteerService volunteerService, MailService mailService, FireBaseService fireBaseService) {
+    public LoginController(AuthenticationService service, VolunteerService volunteerService, MailService mailService, IFireBaseService fireBaseService) {
         this.service = service;
         this.mailService = mailService;
         this.fireBaseService = fireBaseService;
