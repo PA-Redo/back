@@ -489,6 +489,17 @@ public class InDBEventRepository implements EventRepository {
         return eventToExactOccurrenceEventForBeneficiary(list, beneficiaryId);
     }
 
+    @Override
+    public List<EventTimeWindow> findEventInTheNext15Minutes() {
+        ZonedDateTime now = ZonedDateTime.now();
+        ZonedDateTime fifteenMinutesLater = now.plusMinutes(15);
+
+        return eventTimeWindowDBRepository.findByEventSessionDB_EventDB_LocalUnitIDAndStartTimeAfter(1L, now).stream()
+                .filter(eventTimeWindowDB -> eventTimeWindowDB.getStart().isAfter(now) && eventTimeWindowDB.getStart().isBefore(fifteenMinutesLater))
+                .map(this::toEventTimeWindow)
+                .toList();
+    }
+
     private List<Event> eventToExactOccurrenceEventForBeneficiary(List<Event> events, ID beneficiaryId) {
         List<Event> exactOccurrenceEvents = new ArrayList<>();
         for (Event event : events) {

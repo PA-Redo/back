@@ -20,9 +20,4 @@ public interface UserDBRepository extends CrudRepository<UserDB, Long> {
 
     @Query("select u from UserDB u where u.tokenToValidateEmail = :token")
     Optional<UserDB> findByToken(@Param("token") String token);
-
-    //void updateFirebaseToken(String firebaseToken, String username);
-    @Modifying
-    @Query("update UserDB u set u.firebaseToken = :firebaseToken where u.username = :username")
-    void updateFirebaseToken(@Param("firebaseToken") String firebaseToken, @Param("username") String username);
 }

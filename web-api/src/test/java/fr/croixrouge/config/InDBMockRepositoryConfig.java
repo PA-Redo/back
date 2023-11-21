@@ -110,11 +110,11 @@ public class InDBMockRepositoryConfig {
                 localUnit,
                 List.of());
 
-        defaultUser = new User(null, "defaultUser", passwordEncoder.encode("defaultPassword"), localUnit, List.of(defaultRole), true, null, firebaseToken);
+        defaultUser = new User(null, "defaultUser", passwordEncoder.encode("defaultPassword"), localUnit, List.of(defaultRole), true, null, null);
 
-        managerUser = new User(null, "LUManager", passwordEncoder.encode("LUPassword"), localUnit, List.of(managerRole), true, null, firebaseToken);
+        managerUser = new User(null, "LUManager", passwordEncoder.encode("LUPassword"), localUnit, List.of(managerRole), true, null, null);
 
-        beneficiaryUser = new User(null, "benefUser", passwordEncoder.encode("benefPassword"), localUnit, List.of(defaultRole), true, null, firebaseToken);
+        beneficiaryUser = new User(null, "benefUser", passwordEncoder.encode("benefPassword"), localUnit, List.of(defaultRole), true, null, null);
 
         volunteer1 = new Volunteer(null, managerUser, "volunteerFirstName", "volunteerLastName", "+33 6 00 00 00 00", true);
 
@@ -122,13 +122,13 @@ public class InDBMockRepositoryConfig {
 
         beneficiary1 = new Beneficiary(null, beneficiaryUser, "beneficiaryFirstName", "beneficiaryLastName", "+33 6 00 00 00 00", true, LocalDate.of(2000, 6, 1), "1223", List.of(), 0L);
 
-        userForAuthTest = new User(null, "userForAuthTest", passwordEncoder.encode("userForAuthTestPassword"), southernLocalUnit, List.of(roleForAuthTest), true, null, firebaseToken);
+        userForAuthTest = new User(null, "userForAuthTest", passwordEncoder.encode("userForAuthTestPassword"), southernLocalUnit, List.of(roleForAuthTest), true, null, null);
 
-        southernManagerUser = new User(null, "SLUManager", passwordEncoder.encode("SLUPassword"), southernLocalUnit, List.of(managerRole), true, null, firebaseToken);
+        southernManagerUser = new User(null, "SLUManager", passwordEncoder.encode("SLUPassword"), southernLocalUnit, List.of(managerRole), true, null, null);
 
         southernVolunteer1 = new Volunteer(null, southernManagerUser, "southernVolunteer", "southernVolunteerName", "+33 6 83 83 83 83", true);
 
-        volunteerUser = new User(null, "volunteerUser", passwordEncoder.encode("volunteerPassword"), localUnit, List.of(defaultRole), true, null, firebaseToken);
+        volunteerUser = new User(null, "volunteerUser", passwordEncoder.encode("volunteerPassword"), localUnit, List.of(defaultRole), true, null, null);
 
         product1 = new Product(new ID(1L), "Product 1", new WeightQuantifier(1, WeightUnit.KILOGRAM), null, localUnit.getId());
         product2 = new Product(new ID(2L), "Product 2", new VolumeQuantifier(1, VolumeUnit.LITER), null, localUnit.getId());

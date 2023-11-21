@@ -92,6 +92,9 @@ public class InDBUserRepository implements UserRepository {
 
     @Override
     public void updateFirebaseToken(String firebaseToken, String username) {
-        userDBRepository.updateFirebaseToken(firebaseToken, username);
+        userDBRepository.findByUsername(username).ifPresent(userDB -> {
+            userDB.setFirebaseToken(firebaseToken);
+            userDBRepository.save(userDB);
+        });
     }
 }

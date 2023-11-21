@@ -9,6 +9,12 @@ public class LoginRequest {
     public LoginRequest() {
     }
 
+    public LoginRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.firebaseToken = null;
+    }
+
     public LoginRequest(String username, String password, String firebaseToken) {
         this.username = username;
         this.password = password;

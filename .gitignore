@@ -31,3 +31,5 @@ target/
 *.properties
 !application-env.properties
 /mysql/
+/web-api/src/main/resources/pa-croix-rouge-firebase-adminsdk-ukfjw-e5a822b570.json
+/web-api/src/main/resources/serviceAccountKey.json

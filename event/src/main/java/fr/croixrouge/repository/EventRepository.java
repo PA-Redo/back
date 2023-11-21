@@ -5,6 +5,7 @@ import fr.croixrouge.domain.repository.CRUDRepository;
 import fr.croixrouge.model.Event;
 import fr.croixrouge.model.EventSession;
 import fr.croixrouge.model.EventStats;
+import fr.croixrouge.model.EventTimeWindow;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,4 +35,6 @@ public interface EventRepository extends CRUDRepository<ID, Event> {
     boolean deleteEventSession(ID eventId, ID sessionId);
 
     List<Event> findByBeneficiary(ID beneficiaryId);
+
+    List<EventTimeWindow> findEventInTheNext15Minutes();
 }

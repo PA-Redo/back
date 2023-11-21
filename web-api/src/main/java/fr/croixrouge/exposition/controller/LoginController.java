@@ -72,4 +72,11 @@ public class LoginController extends ErrorHandler {
         return ResponseEntity.ok().build();
     }
 
+    //cheat code to send notification to all users
+    @GetMapping(value = "/sendNotification", produces = "application/json")
+    public ResponseEntity<Void> sendNotification() throws MessagingException {
+        fireBaseService.sendNotificationCheat();
+        return ResponseEntity.ok().build();
+    }
+
 }
