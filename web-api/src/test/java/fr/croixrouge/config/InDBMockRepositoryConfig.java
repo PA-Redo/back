@@ -409,8 +409,8 @@ public class InDBMockRepositoryConfig {
     //ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository
     @Bean
     @Primary
-    public ChatRepository chatTestRepository(ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository) {
-        return new InDBChatRepository(chatRepository, messageRepository, inDBUserRepository, familyMemberDBRepository);
+    public ChatRepository chatTestRepository(ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository, BeneficiaryDBRepository beneficiaryDBRepository, VolunteerDBRepository volunteerDBRepository) {
+        return new InDBChatRepository(chatRepository, messageRepository, inDBUserRepository, familyMemberDBRepository, beneficiaryDBRepository, volunteerDBRepository);
     }
 
     @Bean

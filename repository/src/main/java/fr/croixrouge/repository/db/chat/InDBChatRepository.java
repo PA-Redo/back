@@ -5,8 +5,10 @@ import fr.croixrouge.domain.model.FamilyMember;
 import fr.croixrouge.domain.model.ID;
 import fr.croixrouge.domain.model.User;
 import fr.croixrouge.repository.db.beneficiary.BeneficiaryDB;
+import fr.croixrouge.repository.db.beneficiary.BeneficiaryDBRepository;
 import fr.croixrouge.repository.db.beneficiary.FamilyMemberDBRepository;
 import fr.croixrouge.repository.db.user.InDBUserRepository;
+import fr.croixrouge.repository.db.volunteer.VolunteerDBRepository;
 import fr.croixrouge.storage.model.Chat;
 import fr.croixrouge.storage.model.Message;
 import fr.croixrouge.storage.repository.ChatRepository;
@@ -20,12 +22,16 @@ public class InDBChatRepository implements ChatRepository {
     private final MessageDBRepository messageRepository;
     private final InDBUserRepository inDBUserRepository;
     private final FamilyMemberDBRepository familyMemberDBRepository;
+    private final BeneficiaryDBRepository beneficiaryDBRepository;
+    private final VolunteerDBRepository volunteerDBRepository;
 
-    public InDBChatRepository(ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository) {
+    public InDBChatRepository(ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository, BeneficiaryDBRepository beneficiaryDBRepository, VolunteerDBRepository volunteerDBRepository) {
         this.chatRepository = chatRepository;
         this.messageRepository = messageRepository;
         this.inDBUserRepository = inDBUserRepository;
         this.familyMemberDBRepository = familyMemberDBRepository;
+        this.beneficiaryDBRepository = beneficiaryDBRepository;
+        this.volunteerDBRepository = volunteerDBRepository;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class InDBChatRepository implements ChatRepository {
                 toBeneficiary(chatDB.getBeneficiaryDB()),
                 chatDB.getConvname(),
                 messageRepository.findByChatDB_Id(ID.of(chatDB.getId()).value()).stream().map(
-                        messageDB -> toMessage(messageDB, inDBUserRepository.findById(new ID(messageDB.getUserDB().getUserID())).orElseThrow().getUsername())
+                        messageDB -> toMessage(messageDB, getUsername(messageDB))
                 ).toList()
         );
     }
@@ -156,8 +162,20 @@ public class InDBChatRepository implements ChatRepository {
     public List<Message> findMessagesByChatId(ID chatId) {
         return messageRepository.findByChatDB_Id(chatId.value())
                 .stream()
-                .map(messageDB -> toMessage(messageDB, inDBUserRepository.findById(new ID(messageDB.getUserDB().getUserID())).orElseThrow().getUsername()))
+                .map(messageDB -> toMessage(messageDB, getUsername(messageDB)))
                 .toList();
+    }
+
+    private String getUsername(MessageDB messageDB) {
+        var beneficiary = beneficiaryDBRepository.findByUserDB_UserID(messageDB.getUserDB().getUserID());
+        if (beneficiary.isPresent()) {
+            return beneficiary.get().getFirstname();
+        }
+        var volunteer = volunteerDBRepository.findByUserDB_UserID(messageDB.getUserDB().getUserID());
+        if (volunteer.isPresent()) {
+            return volunteer.get().getFirstname();
+        }
+        return messageDB.getUserDB().getUsername();
     }
 
     @Override

@@ -25,7 +25,6 @@ import fr.croixrouge.repository.db.user.InDBUserRepository;
 import fr.croixrouge.repository.db.user.UserDBRepository;
 import fr.croixrouge.repository.db.volunteer.InDBVolunteerRepository;
 import fr.croixrouge.repository.db.volunteer.VolunteerDBRepository;
-import fr.croixrouge.storage.repository.ChatRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -104,7 +103,7 @@ public class RepositoryConfig {
 
     @Bean
     @Primary
-    public InDBChatRepository chatRepository(ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository) {
-        return new InDBChatRepository(chatRepository, messageRepository, inDBUserRepository, familyMemberDBRepository);
+    public InDBChatRepository chatRepository(ChatDBRepository chatRepository, MessageDBRepository messageRepository, InDBUserRepository inDBUserRepository, FamilyMemberDBRepository familyMemberDBRepository, BeneficiaryDBRepository beneficiaryDBRepository, VolunteerDBRepository volunteerDBRepository) {
+        return new InDBChatRepository(chatRepository, messageRepository, inDBUserRepository, familyMemberDBRepository, beneficiaryDBRepository, volunteerDBRepository);
     }
 }
