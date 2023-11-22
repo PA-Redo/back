@@ -79,8 +79,4 @@ public class User extends Entity<ID> {
     public User setPassword(String encode) {
         return new User(id, username, encode, localUnit, roles, emailValidated, tokenToValidateEmail, firebaseToken);
     }
-
-    public String toUsername() {
-
-    }
 }

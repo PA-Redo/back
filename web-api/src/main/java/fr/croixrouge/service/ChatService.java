@@ -17,9 +17,9 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final BeneficiaryService beneficiaryService;
-    private final FireBaseService fireBaseService;
+    private final IFireBaseService fireBaseService;
 
-    public ChatService(ChatRepository chatRepository, BeneficiaryService beneficiaryService, FireBaseService fireBaseService) {
+    public ChatService(ChatRepository chatRepository, BeneficiaryService beneficiaryService, IFireBaseService fireBaseService) {
         this.chatRepository = chatRepository;
         this.beneficiaryService = beneficiaryService;
         this.fireBaseService = fireBaseService;
