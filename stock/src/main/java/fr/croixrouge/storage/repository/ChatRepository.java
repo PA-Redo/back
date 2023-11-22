@@ -2,6 +2,7 @@ package fr.croixrouge.storage.repository;
 
 import fr.croixrouge.domain.model.Beneficiary;
 import fr.croixrouge.domain.model.ID;
+import fr.croixrouge.domain.model.User;
 import fr.croixrouge.domain.repository.CRUDRepository;
 import fr.croixrouge.storage.model.Chat;
 import fr.croixrouge.storage.model.Message;
@@ -20,4 +21,6 @@ public interface ChatRepository extends CRUDRepository<ID, Chat> {
     List<Message> findMessagesByChatId(ID chatId);
 
     Optional<Chat> findChatByChatId(ID chatId);
+
+    List<User> findUsersByChatId(ID conversationId);
 }

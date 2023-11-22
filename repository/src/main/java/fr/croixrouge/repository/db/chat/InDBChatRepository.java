@@ -3,6 +3,7 @@ package fr.croixrouge.repository.db.chat;
 import fr.croixrouge.domain.model.Beneficiary;
 import fr.croixrouge.domain.model.FamilyMember;
 import fr.croixrouge.domain.model.ID;
+import fr.croixrouge.domain.model.User;
 import fr.croixrouge.repository.db.beneficiary.BeneficiaryDB;
 import fr.croixrouge.repository.db.beneficiary.FamilyMemberDBRepository;
 import fr.croixrouge.repository.db.user.InDBUserRepository;
@@ -37,17 +38,20 @@ public class InDBChatRepository implements ChatRepository {
                 ID.of(chatDB.getId()),
                 toBeneficiary(chatDB.getBeneficiaryDB()),
                 chatDB.getConvname(),
-                messageRepository.findByChatDB_Id(ID.of(chatDB.getId()).value()).stream().map(this::toMessage).toList()
+                messageRepository.findByChatDB_Id(ID.of(chatDB.getId()).value()).stream().map(
+                        messageDB -> toMessage(messageDB, inDBUserRepository.findById(new ID(messageDB.getUserDB().getUserID())).orElseThrow().getUsername())
+                ).toList()
         );
     }
 
-    private Message toMessage(MessageDB messageDB) {
+    private Message toMessage(MessageDB messageDB, String username) {
         return new Message(
                 ID.of(messageDB.getId()),
                 ID.of(messageDB.getChatDB().getId()),
                 ID.of(messageDB.getUserDB().getUserID()),
                 messageDB.getMessage(),
-                messageDB.getDate()
+                messageDB.getDate(),
+                username
         );
     }
 
@@ -150,13 +154,23 @@ public class InDBChatRepository implements ChatRepository {
 
     @Override
     public List<Message> findMessagesByChatId(ID chatId) {
-        return messageRepository.findByChatDB_Id(chatId.value()).stream()
-                .map(this::toMessage)
+        return messageRepository.findByChatDB_Id(chatId.value())
+                .stream()
+                .map(messageDB -> toMessage(messageDB, inDBUserRepository.findById(new ID(messageDB.getUserDB().getUserID())).orElseThrow().getUsername()))
                 .toList();
     }
 
     @Override
     public Optional<Chat> findChatByChatId(ID chatId) {
         return chatRepository.findById(chatId.value()).map(this::toChat);
+    }
+
+    @Override
+    public List<User> findUsersByChatId(ID conversationId) {
+        return messageRepository.findByChatDB_Id(conversationId.value()).stream()
+                .distinct()
+                .map(messageDB -> inDBUserRepository.toUser(messageDB.getUserDB()))
+                .distinct()
+                .toList();
     }
 }

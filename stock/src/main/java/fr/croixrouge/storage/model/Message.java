@@ -10,13 +10,15 @@ public class Message extends Entity<ID> {
     private ID authorId;
     private String message;
     private LocalDateTime date;
+    private String username;
 
-    public Message(ID id, ID conversationId, ID authorId, String message, LocalDateTime date) {
+    public Message(ID id, ID conversationId, ID authorId, String message, LocalDateTime date, String username) {
         super(id);
         this.conversationId = conversationId;
         this.authorId = authorId;
         this.message = message;
         this.date = date;
+        this.username = username;
     }
 
     public ID getConversationId() {
@@ -37,5 +39,9 @@ public class Message extends Entity<ID> {
 
     public ID getAuthorId() {
         return authorId;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

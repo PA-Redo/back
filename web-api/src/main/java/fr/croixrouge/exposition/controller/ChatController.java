@@ -29,7 +29,7 @@ public class ChatController extends ErrorHandler {
     @GetMapping("/messages/{conversationId}")
     public List<MessageDto> getMessages(@PathVariable Long conversationId) {
         return chatService.allMessageOfChat(ID.of(conversationId)).stream()
-                .map(message -> new MessageDto(message.getAuthorId().value(), message.getMessage(), message.getDate()))
+                .map(message -> new MessageDto(message.getUsername(), message.getAuthorId().value(), message.getMessage(), message.getDate()))
                 .toList();
     }
 

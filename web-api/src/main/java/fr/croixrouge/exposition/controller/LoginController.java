@@ -75,5 +75,4 @@ public class LoginController extends ErrorHandler {
         fireBaseService.sendNotificationCheat();
         return ResponseEntity.ok().build();
     }
-
 }
